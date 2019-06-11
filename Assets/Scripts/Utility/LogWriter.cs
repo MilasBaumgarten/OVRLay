@@ -75,6 +75,8 @@ namespace Utility {
 
         public void CloseWriter() {
             StopWriting();
+			if (writer.BaseStream == null) return;	// return if writer is already closed
+
             writer.Flush();
             writer.Close();
         }

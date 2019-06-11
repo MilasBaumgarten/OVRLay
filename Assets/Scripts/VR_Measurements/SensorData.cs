@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.IO.Ports;
 using System.IO;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using Utility;
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 
@@ -17,8 +19,11 @@ namespace VR_Measurements {
 
 		private LogWriter _sensorDataWriter;
 		private bool _recording = false;
+		[SerializeField] private Text _debugConsole;
 
-		void Start() {
+		[SerializeField] private UnityEvent onSensorError;
+
+		private bool Init() {
 			try {
 				_serialPort = new SerialPort(_port, 9600, Parity.None, 8, StopBits.One) {
 																							Handshake = Handshake.None,
@@ -26,23 +31,31 @@ namespace VR_Measurements {
 																						};
 				_serialPort.Open();
 
-				Debug.Log("Port " + _port + " is reading");
+				_debugConsole.text = ">> Port " + _port + " is reading";
+				return true;
 			} catch (IOException) {
-				Debug.LogError("Port: " + _port + " is not available");
+				onSensorError?.Invoke();
+				_debugConsole.text = ">> Port: " + _port + " is not available";
+				return false;
 			}
+		}
 
+		private void Start() {
 			if (_recordAtStart) {
 				StartRecording();
 			}
 		}
 
 		void Update() {
-			if (!_serialPort.IsOpen) return;
-
 			if (_recording) {
+				if (!_serialPort.IsOpen) return;
 				// get new data
 				ReadPort();
 			}
+		}
+
+		public void SetPort(Text input) {
+			_port = input.text;
 		}
 
 		private void ReadPort() {
@@ -53,8 +66,10 @@ namespace VR_Measurements {
 				Debug.LogError("Serial port data was in an unexpected format. \n" +
 							   "This is normal on startup but shouldn't occur while the program is running.");
 			} catch (IOException) {
-				Debug.LogError("Connection to the Port was lost!");
+				_debugConsole.text = ">> Connection to the Port was lost!";
+				onSensorError?.Invoke();
 				_serialPort.Close();
+				StopRecording();
 			} catch (TimeoutException) { 
 				// silence the timeout
 			} catch (Exception e) {
@@ -71,14 +86,18 @@ namespace VR_Measurements {
 		}
 
 		public void StartRecording() {
-			_recording = true;
-			_sensorDataWriter = new LogWriter("SensorData_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"), true);
-			ReadPort();
+			_recording = Init();
+			if (_recording) {
+				_sensorDataWriter = new LogWriter("SensorData_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"), true);
+				ReadPort();
+			}
 		}
 
 		public void StopRecording() {
 			_recording = false;
 			_sensorDataWriter?.CloseWriter();
+
+			OnApplicationQuit();
 		}
 
 		private void OnApplicationQuit() {

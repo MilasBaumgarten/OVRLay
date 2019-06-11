@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Tracking.unity
+    guid: 10efbe53cf2578745bfd9349f09b8418
+  m_configObjects: {}

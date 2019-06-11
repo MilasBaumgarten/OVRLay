@@ -135,6 +135,7 @@ namespace VR_Measurements {
 		}
 	}
 
+#if UNITY_EDITOR
 	[CustomEditor(typeof(ReplayData))]
 	public class ReplayDataEditor : Editor {
 		public override void OnInspectorGUI() {
@@ -147,4 +148,5 @@ namespace VR_Measurements {
 			}
 		}
 	}
+#endif
 }

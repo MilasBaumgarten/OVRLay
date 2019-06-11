@@ -93,6 +93,7 @@ namespace VR_Measurements {
 		}
 	}
 
+#if UNITY_EDITOR
 	[CustomEditor(typeof(TrackingData))]
 	public class TrackingDataEditor : Editor {
 		public override void OnInspectorGUI() {
@@ -105,4 +106,5 @@ namespace VR_Measurements {
 			}
 		}
 	}
+#endif
 }
