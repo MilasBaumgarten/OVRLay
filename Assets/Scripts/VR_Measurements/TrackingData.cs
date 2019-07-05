@@ -20,6 +20,12 @@ namespace VR_Measurements {
 		[SerializeField] private UnityEvent _onStartRecording;
 		[SerializeField] private UnityEvent _onStopRecording;
 
+		private bool shouldTrack = true;
+
+		public void ShouldTrack(bool value) {
+			shouldTrack = value;
+		}
+
 		private void Start() {
 			if (recordAtStart) {
 				StartRecording();
@@ -44,6 +50,8 @@ namespace VR_Measurements {
 		}
 
 		public void StartRecording() {
+			if (!shouldTrack) return;
+
 			recording = true;
 			stopwatch = new System.Diagnostics.Stopwatch();
 			stopwatch.Start();

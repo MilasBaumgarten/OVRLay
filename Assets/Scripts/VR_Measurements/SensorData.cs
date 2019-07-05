@@ -12,7 +12,7 @@ namespace VR_Measurements {
 		[Header("Port Settings")]
 		[SerializeField] private string _port = "COM3";
 		private SerialPort _serialPort;
-		private string _serialData = "";
+		//private string _serialData = "";
 
 		[Header("Recording Settings")]
 		[SerializeField] private bool _recordAtStart = false;
@@ -101,8 +101,10 @@ namespace VR_Measurements {
 		}
 
 		private void OnApplicationQuit() {
-			if (_serialPort.IsOpen) {
-				_serialPort.Close();
+			if (_serialPort != null) {
+				if (_serialPort.IsOpen) {
+					_serialPort.Close();
+				}
 			}
 		}
 	}

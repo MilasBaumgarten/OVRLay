@@ -54,6 +54,10 @@ public class Unity_SteamVR_Handler : MonoBehaviour
 		ovrHandler.onVREvent += VREventHandler;
 	}
 
+	public void SetAutoUpdate(bool value) {
+		autoUpdate = value;
+	}
+
 	void OnOpenVRChange(bool connected) 
 	{
 		connectedToSteam = connected;
@@ -74,9 +78,8 @@ public class Unity_SteamVR_Handler : MonoBehaviour
 			onDashboardClose.Invoke();
 	}
 
-	void Update() 
-	{
-		if(autoUpdate)
+	void Update() {
+		if (autoUpdate)
 			UpdateHandler();
 	}
 

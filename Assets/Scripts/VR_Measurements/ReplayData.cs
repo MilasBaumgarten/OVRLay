@@ -30,19 +30,6 @@ namespace VR_Measurements {
 			}
 		}
 
-		// Update is called once per frame
-		private void Update() {
-			//if (!SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.LeftHand) ||
-			//    !SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.RightHand)) return;
-			//Debug.Log("Playing");
-
-			//if (replay != null) {
-			//    StopReplay();
-			//}
-
-			//StartReplayAsync(ReadFileMode.FilePath);
-		}
-
 		public async void StartReplayAsync(ReadFileMode readFileMode) {
 			if (replay != null) {
 				StopReplay();
